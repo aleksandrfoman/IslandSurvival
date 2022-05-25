@@ -7,7 +7,8 @@ public class MapGenerator : MonoBehaviour
     public enum DrawMode
     {
         NoiseMap,
-        ColourMap
+        ColourMap,
+        Mesh
     }
     public DrawMode drawMode;
     public int mapWidth;
@@ -24,6 +25,7 @@ public class MapGenerator : MonoBehaviour
     public bool autoUpdate;
 
     public Gradient regionGragient;
+
     public void GenerateMap()
     {
         float[,] noiseMap = Noise.GenerateNoiseMap(mapWidth, mapHeight,seed,noiseScale,octaves,persistance,lacunarity,offset);
@@ -49,6 +51,10 @@ public class MapGenerator : MonoBehaviour
         else if(drawMode == DrawMode.ColourMap)
         {
             display.DrawTexture(TextureGenerator.TextureFromColourMap(colourMap,mapWidth,mapHeight));
+        }
+        else if(drawMode == DrawMode.Mesh)
+        {
+            display.DrawMesh(MeshGenerator.GenerateTerrainMesh(noiseMap), TextureGenerator.TextureFromColourMap(colourMap, mapWidth, mapHeight));
         }
     }
 
