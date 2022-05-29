@@ -17,14 +17,51 @@ public class MapGenerator : MonoBehaviour
     public float falloffStart;
     [Range(0f, 1f)]
     public float fallofEnd;
+
     [Header("Island")]
     public Terrain terrain;
     public bool autoUpdate;
-    public GameObject prefabTree;
+    public Gradient gradient;
+    public LayerMask islandLayerMask;
 
+    [Header("GenerateObject")]
+    public GenerateObjectStruct[] generateObjects;
+    public List<GameObject> gameObjcts;
+
+
+    private void Start()
+    {
+        GenerateMap();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            GenerateMap();
+        }
+    }
     public void GenerateMap()
     {
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
+
+        ResetGameObject();
+        for (int i = 0; i < generateObjects.Length; i++)
+        {
+            for (int k = 0; k < generateObjects[i].count; k++)
+            {
+                gameObjcts.Add(GenerateGameObject(generateObjects[i].prefab, generateObjects[i].minHeight, generateObjects[i].maxHeight));
+            }
+        }
+    }
+
+    private void ResetGameObject()
+    {
+        foreach (var item in gameObjcts)
+        {
+            Destroy(item);
+        }
+        gameObjcts.Clear();
     }
 
     private TerrainData GenerateTerrain(TerrainData terrainData)
@@ -36,9 +73,24 @@ public class MapGenerator : MonoBehaviour
         return terrainData;
     }
 
-    private void GenerageGameObject(GameObject prefab,float minHeight, float maxHeight,int count)
+    private GameObject GenerateGameObject(GameObject prefab,float minHeight, float maxHeight)
     {
+        RaycastHit hit;
+        bool spawnded = false;
+        do
+        {
+            Vector3 rndPos = new Vector3(Random.Range(-mapSize.x / 2, mapSize.x / 2), 500f, Random.Range(-mapSize.z / 2, mapSize.z / 2));
 
+            if (Physics.Raycast(rndPos, Vector3.down, out hit, Mathf.Infinity, islandLayerMask))
+            {
+                if (hit.point.y >= minHeight && hit.point.y <= maxHeight)
+                {
+                    spawnded = true;
+                }
+            }
+        }
+        while (!spawnded);
+        return Instantiate(prefab, hit.point, Quaternion.identity);
     }
 
     private void OnValidate()
@@ -52,4 +104,15 @@ public class MapGenerator : MonoBehaviour
             octaves = 0;
         }
     }
+}
+
+[System.Serializable]
+public struct GenerateObjectStruct
+{
+    public string name;
+    public GameObject prefab;
+    public int count;
+    public float minHeight;
+    public float maxHeight;
+    public Transform parent;
 }
