@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class Noise { 
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight,int seed,float scale,int octaves, float persistance, float lacunarity, Vector2 offset)
+    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight,int seed,float scale,int octaves, float persistance,
+                                            float lacunarity, Vector2 offset,float falloffStart,float fallofEnd)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
 
@@ -65,7 +66,39 @@ public static class Noise {
                 noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
             }
         }
-      
+
+        float radiusIsland = halfWidth * falloffStart;
+        float radiusSmoothness = radiusIsland + (radiusIsland * fallofEnd);
+
+        for (int y = 0; y < mapHeight; y++)
+        {
+            for (int x = 0; x < mapWidth; x++)
+            {
+                float distPoint = Vector2.Distance(new Vector2(halfWidth, halfHeight), new Vector2(x, y));
+
+                //Debug.Log("P:" + distPoint + "I:"+radiusIsland);
+
+
+                if (distPoint > radiusIsland)
+                {
+                    // Debug.Log(distPoint+" yes");
+
+                    if (distPoint < radiusSmoothness)
+                    {
+                        float delta = radiusSmoothness - radiusIsland;
+                        float pointSmoothness = distPoint - radiusIsland;
+                        float precentTwo = pointSmoothness / delta;
+                        precentTwo = 1 - precentTwo;
+                        noiseMap[x, y] *= precentTwo;
+                    }
+                    else
+                    {
+                        noiseMap[x, y] = 0;
+                    }
+                }
+            }
+        }
+
         return noiseMap;
     }
 }
