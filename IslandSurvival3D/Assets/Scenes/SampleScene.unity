@@ -784,7 +784,7 @@ Terrain:
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 80
+  m_DetailObjectDistance: 250
   m_DetailObjectDensity: 1
   m_HeightmapPixelError: 5
   m_SplatMapDistance: 1000
@@ -1126,6 +1126,7 @@ Transform:
   - {fileID: 1959330719}
   - {fileID: 1672972182}
   - {fileID: 641366545}
+  - {fileID: 1976106345}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1414,8 +1415,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapSize: {x: 512, y: 45, z: 512}
-  seed: 0
-  scale: 150
+  seed: 4
+  scale: 200
   octaves: 4
   persistance: 0.5
   lacunarity: 2
@@ -1455,7 +1456,12 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   islandLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
+  patchDetail: 64
+  grassDensity: 512
+  grassAmount: 0.15
+  minHeightGrass: 13
+  maxHeightGrass: 50
   generateObjects:
   - name: Tree
     prefab: {fileID: 7611876719809890112, guid: 63191ec94841efb4ebeae12400ac00f9, type: 3}
@@ -1743,10 +1749,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1976106344}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 315.23535, y: 159.86465, z: -168.57544}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_Father: {fileID: 1306430443}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
