@@ -641,6 +641,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 314653884}
   m_CullTransparentMesh: 1
+--- !u!1 &525663516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 525663517}
+  m_Layer: 0
+  m_Name: --Stones--
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &525663517
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 525663516}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1306430443}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &613735303
 GameObject:
   m_ObjectHideFlags: 0
@@ -1127,6 +1157,7 @@ Transform:
   - {fileID: 1672972182}
   - {fileID: 641366545}
   - {fileID: 1976106345}
+  - {fileID: 525663517}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1415,7 +1446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapSize: {x: 512, y: 45, z: 512}
-  seed: 4
+  seed: 2
   scale: 200
   octaves: 4
   persistance: 0.5
@@ -1456,10 +1487,10 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   islandLayerMask:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 448
   patchDetail: 64
   grassDensity: 512
-  grassAmount: 0.15
+  grassAmount: 1
   minHeightGrass: 13
   maxHeightGrass: 50
   generateObjects:
@@ -1468,7 +1499,17 @@ MonoBehaviour:
     count: 100
     minHeight: 14
     maxHeight: 40
-    parent: {fileID: 1976106345}
+    parentTransform: {fileID: 1976106345}
+    minScale: 0.95
+    maxScale: 1.05
+  - name: Stone
+    prefab: {fileID: 979873380285424581, guid: 7d1b1eae2b066d44aa6f8145932b7aee, type: 3}
+    count: 100
+    minHeight: 20
+    maxHeight: 50
+    parentTransform: {fileID: 525663517}
+    minScale: 2
+    maxScale: 4
   gameObjcts: []
 --- !u!4 &1672972182 stripped
 Transform:

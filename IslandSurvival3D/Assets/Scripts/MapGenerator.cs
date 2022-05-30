@@ -41,33 +41,35 @@ public class MapGenerator : MonoBehaviour
     public GenerateObjectStruct[] generateObjects;
     public List<GameObject> gameObjcts;
 
-
     private void Start()
     {
-        GenerateMap();
+        GenerateMap(seed);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            GenerateMap();
+            GenerateMap(seed);
         }
     }
-    public void GenerateMap()
+    public void GenerateMap(int seedGame)
     {
+        System.Random prng = new System.Random(seedGame);
+
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
-        GenGrass();
+        GenGrass(prng);
         ResetGameObject();
         
         for (int i = 0; i < generateObjects.Length; i++)
         {
             for (int k = 0; k < generateObjects[i].count; k++)
             {
-                GameObject generateObject = GenerateGameObject(generateObjects[i].prefab, generateObjects[i].minHeight, generateObjects[i].maxHeight);
-                if (generateObject != null)
+                GameObject gameObject = GenerateGameObject(generateObjects[i].prefab, generateObjects[i].minHeight, generateObjects[i].maxHeight,
+                                                           generateObjects[i].parentTransform, generateObjects[i].minScale, generateObjects[i].maxScale,prng);
+                if (gameObject != null)
                 {
-                    gameObjcts.Add(generateObject);
+                    gameObjcts.Add(gameObject);
                 }
             }
         }
@@ -91,15 +93,16 @@ public class MapGenerator : MonoBehaviour
         return terrainData;
     }
 
-    private GameObject GenerateGameObject(GameObject prefab,float minHeight, float maxHeight)
+    private GameObject GenerateGameObject(GameObject prefab,float minHeight, float maxHeight,Transform parent, float minScale, float maxScale,System.Random prng)
     {
+
         RaycastHit hit;
         bool spawnded = false;
         int tempSpawn = 0;
-
+        
         do
         {
-            Vector3 rndPos = new Vector3(Random.Range(-mapSize.x / 2, mapSize.x / 2), 500f, Random.Range(-mapSize.z / 2, mapSize.z / 2));
+            Vector3 rndPos = new Vector3(prng.NextFloat(-mapSize.x / 2, mapSize.x / 2), 500f, prng.NextFloat(-mapSize.z / 2, mapSize.z / 2));
 
             if (Physics.Raycast(rndPos, Vector3.down, out hit, Mathf.Infinity, islandLayerMask))
             {
@@ -121,13 +124,15 @@ public class MapGenerator : MonoBehaviour
             }
         }
         while (!spawnded);
-        GameObject curreGameObject = Instantiate(prefab, hit.point, Quaternion.identity);
-        curreGameObject.transform.localEulerAngles += Vector3.up * Random.Range(0, 360f);
-        curreGameObject.transform.localScale *= Random.Range(0.95f, 1.2f);
+
+        GameObject curreGameObject = Instantiate(prefab, hit.point, Quaternion.identity,parent.transform);
+        curreGameObject.transform.localEulerAngles += Vector3.up * prng.NextFloat(0f, 360f);
+        curreGameObject.transform.localScale *= prng.NextFloat(minScale, maxScale);
+
         return curreGameObject;
     }
 
-    public void GenGrass()
+    public void GenGrass(System.Random prng)
     {
         var terrainToPopulate = terrain;
         terrainToPopulate.terrainData.SetDetailResolution(grassDensity, patchDetail);
@@ -146,7 +151,7 @@ public class MapGenerator : MonoBehaviour
                 //&& Vector3.Angle(normal, Vector3.up) < 40
                 if (height > minHeightGrass && height < maxHeightGrass)
                 {
-                    if (Random.Range(0f, 1f) < grassAmount)
+                    if (prng.NextFloat(0f, 1f) < grassAmount)
                     {
                         newMap[x, y] = 1;
                     }
@@ -155,7 +160,6 @@ public class MapGenerator : MonoBehaviour
         }
         terrainToPopulate.terrainData.SetDetailLayer(0, 0, 0, newMap);
     }
-
 }
 
 [System.Serializable]
@@ -166,5 +170,7 @@ public struct GenerateObjectStruct
     public int count;
     public float minHeight;
     public float maxHeight;
-    public Transform parent;
+    public Transform parentTransform;
+    public float minScale;
+    public float maxScale;
 }
