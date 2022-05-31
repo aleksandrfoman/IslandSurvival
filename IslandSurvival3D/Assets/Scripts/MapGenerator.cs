@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    [SerializeField]
-    private GenerateObjectStruct[] generateObjects;
     [Header("PerlinNoise")]
     [SerializeField]
     private Vector3Int mapSize;
@@ -52,6 +50,9 @@ public class MapGenerator : MonoBehaviour
     private int minHeightGrass;
     [SerializeField]
     private int maxHeightGrass;
+    [Header("GenerateObject")]
+    [SerializeField]
+    private GenerateObjectStruct[] generateObjects;
     [SerializeField]
     private List<GameObject> gameObjcts;
 
