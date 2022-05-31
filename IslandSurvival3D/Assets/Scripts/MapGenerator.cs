@@ -5,41 +5,56 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     [Header("PerlinNoise")]
-    public Vector3Int mapSize;
-    public int seed;
-    public int scale;
-    public int octaves;
+    [SerializeField]
+    private Vector3Int mapSize;
+    [SerializeField]
+    private int seed;
+    [SerializeField]
+    private int scale;
+    [SerializeField]
+    private int octaves;
     [Range(0f,1f)]
-    public float persistance;
-    public int lacunarity;
-    public Vector2 offset;
+    [SerializeField]
+    private float persistance;
+    [SerializeField]
+    private int lacunarity;
+    [SerializeField]
+    private Vector2 offset;
     [Range(0f, 1f)]
-    public float falloffStart;
+    [SerializeField]
+    private float falloffStart;
     [Range(0f, 1f)]
-    public float fallofEnd;
+    [SerializeField]
+    private float fallofEnd;
 
     [Header("Island")]
-    public Terrain terrain;
-    public bool autoUpdate;
-    public Gradient gradient;
-    public LayerMask islandLayerMask;
+    [SerializeField]
+    private Terrain terrain;
+    [SerializeField]
+    private bool autoUpdate;
+    [SerializeField]
+    private Gradient gradient;
+    [SerializeField]
+    private LayerMask islandLayerMask;
     [Header("Grass")]
-    [SerializeField]
     [Range(0,128)]
-    int patchDetail;
     [SerializeField]
+    private int patchDetail;
     [Range(256,2048)]
-    int grassDensity;
+    [SerializeField]
+    private int grassDensity;
     [SerializeField]
     [Range(0f, 1f)]
-    float grassAmount;
+    private float grassAmount;
     [SerializeField]
     private int minHeightGrass;
     [SerializeField]
     private int maxHeightGrass;
     [Header("GenerateObject")]
-    public GenerateObjectStruct[] generateObjects;
-    public List<GameObject> gameObjcts;
+    [SerializeField]
+    private GenerateObjectStruct[] generateObjects;
+    [SerializeField]
+    private List<GameObject> gameObjcts;
 
     private void Start()
     {
@@ -50,17 +65,18 @@ public class MapGenerator : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            GenerateMap(seed);
+            GenerateMap(Random.Range(int.MinValue, int.MaxValue));
         }
     }
     public void GenerateMap(int seedGame)
     {
         System.Random prng = new System.Random(seedGame);
 
-        terrain.terrainData = GenerateTerrain(terrain.terrainData);
+        terrain.terrainData = GenerateTerrain(terrain.terrainData,seedGame);
         GenGrass(prng);
+
         ResetGameObject();
-        
+
         for (int i = 0; i < generateObjects.Length; i++)
         {
             for (int k = 0; k < generateObjects[i].count; k++)
@@ -79,14 +95,15 @@ public class MapGenerator : MonoBehaviour
     {
         foreach (var item in gameObjcts)
         {
+            item.GetComponent<Collider>().enabled = false;
             Destroy(item);
         }
         gameObjcts.Clear();
     }
 
-    private TerrainData GenerateTerrain(TerrainData terrainData)
+    private TerrainData GenerateTerrain(TerrainData terrainData, int seedGame)
     {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapSize.x, mapSize.z, seed, scale, octaves, persistance, lacunarity, offset,falloffStart,fallofEnd);
+        float[,] noiseMap = Noise.GenerateNoiseMap(mapSize.x, mapSize.z, seedGame, scale, octaves, persistance, lacunarity, offset,falloffStart,fallofEnd);
         terrainData.heightmapResolution = mapSize.x + 1;
         terrainData.size = new Vector3(mapSize.x, mapSize.y, mapSize.z);
         terrainData.SetHeights(0, 0, noiseMap);
@@ -118,7 +135,7 @@ public class MapGenerator : MonoBehaviour
                 }
             }
             tempSpawn++;
-            if (tempSpawn > 25)
+            if (tempSpawn > 50)
             {
                 return null;
             }
