@@ -31,7 +31,10 @@ public class PlayerMovement : MonoBehaviour
     private float verticalInput;
     private Vector3 moveDirection;
     private new Rigidbody rigidbody;
-
+    [SerializeField]
+    private RaycastHit hit;
+    [SerializeField]
+    private new Camera camera;
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
@@ -70,6 +73,15 @@ public class PlayerMovement : MonoBehaviour
             rigidbody.freezeRotation = true;
         }
 
+
+        Physics.Raycast(camera.transform.position, camera.transform.forward, out hit ,2f);
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (hit.transform != null)
+            {
+                Debug.Log(hit.transform.gameObject.name);
+            }
+        }
     }
 
     private void FixedUpdate()
