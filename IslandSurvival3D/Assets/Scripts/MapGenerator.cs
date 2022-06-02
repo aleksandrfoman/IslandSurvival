@@ -10,8 +10,6 @@ public class MapGenerator : MonoBehaviour
     [SerializeField]
     private Vector3Int mapSize;
     [SerializeField]
-    private int seed;
-    [SerializeField]
     private int scale;
     [SerializeField]
     private int octaves;
@@ -54,19 +52,13 @@ public class MapGenerator : MonoBehaviour
     private int maxHeightGrass;
     [SerializeField]
     private List<GameObject> gameObjcts;
+    
 
     private void Start()
     {
-        GenerateMap(seed);
+        GenerateMap(PlayerPrefs.GetInt("Seed", 0));
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            GenerateMap(Random.Range(int.MinValue, int.MaxValue));
-        }
-    }
     public void GenerateMap(int seedGame)
     {
         System.Random prng = new System.Random(seedGame);
@@ -94,7 +86,10 @@ public class MapGenerator : MonoBehaviour
     {
         foreach (var item in gameObjcts)
         {
-            item.GetComponent<Collider>().enabled = false;
+            if(item.TryGetComponent(out Collider collider))
+            {
+                collider.enabled = false;
+            }
             Destroy(item);
         }
         gameObjcts.Clear();

@@ -6,8 +6,6 @@ using UnityEngine;
 public class PlayerCameraController : MonoBehaviour
 {
     [SerializeField]
-    private Vector3 offset;
-    [SerializeField]
     private float cameraSpeed;
     [SerializeField]
     private Transform cameraHolder;
@@ -21,6 +19,12 @@ public class PlayerCameraController : MonoBehaviour
     private Transform cameraPosistion;
     private float xRotation;
     private float yRotation;
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
     private void Update()
     {

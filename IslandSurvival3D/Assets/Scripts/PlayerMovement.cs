@@ -7,9 +7,12 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField]
     private float moveSpeed;
-    public float groundDrag;
+    [SerializeField]
+    private float groundDrag;
     [SerializeField]
     private float swimDrag;
+    [SerializeField]
+    private float airDrag;
     [SerializeField]
     private float jumpForce;
     [SerializeField]
@@ -53,7 +56,6 @@ public class PlayerMovement : MonoBehaviour
             rigidbody.constraints = RigidbodyConstraints.FreezePositionY;
             rigidbody.freezeRotation = true;
             rigidbody.drag = swimDrag;
-            Debug.Log("swim");
         }
         //Run
         else if(grounded)
@@ -61,12 +63,11 @@ public class PlayerMovement : MonoBehaviour
             rigidbody.drag = groundDrag;
             rigidbody.constraints = RigidbodyConstraints.None;
             rigidbody.freezeRotation = true;
-            Debug.Log("grounded");
         }
         //Fly
         else if(transform.position.y>=minHeight && !grounded)
         {
-            rigidbody.drag = 0;
+            rigidbody.drag = airDrag;
             rigidbody.freezeRotation = true;
         }
     }
