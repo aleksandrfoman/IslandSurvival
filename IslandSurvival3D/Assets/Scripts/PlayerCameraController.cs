@@ -8,15 +8,11 @@ public class PlayerCameraController : MonoBehaviour
     [SerializeField]
     private float cameraSpeed;
     [SerializeField]
-    private Transform cameraHolder;
-    [SerializeField]
     private float sensX;
     [SerializeField]
     private float sensY;
     [SerializeField]
     private Transform orientation;
-    [SerializeField]
-    private Transform cameraPosistion;
     private float xRotation;
     private float yRotation;
 
@@ -28,8 +24,6 @@ public class PlayerCameraController : MonoBehaviour
 
     private void Update()
     {
-        cameraHolder.position = cameraPosistion.position;
-
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
         yRotation += mouseX;

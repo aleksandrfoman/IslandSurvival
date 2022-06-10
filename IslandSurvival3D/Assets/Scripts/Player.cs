@@ -9,18 +9,30 @@ public class Player : MonoBehaviour
     private new Camera camera;
     [SerializeField]
     private int hitDist;
-
+    [SerializeField]
+    private PlayerInventory playerInventory;
     private void Update()
     {
-
         Physics.Raycast(camera.transform.position, camera.transform.forward, out hit, hitDist);
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (hit.transform != null)
         {
-            if (hit.transform != null)
+            Debug.Log(hit.transform.gameObject.name);
+            if (hit.transform.gameObject.TryGetComponent(out SmallStone smallStone))
             {
-                Debug.Log(hit.transform.gameObject.name);
+                if (smallStone != null)
+                {
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        playerInventory.AddItem(smallStone.TakeItem());
+                    }
+                }
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawRay(camera.transform.position, camera.transform.forward * hitDist);
+        Gizmos.color = Color.red;
     }
 }
