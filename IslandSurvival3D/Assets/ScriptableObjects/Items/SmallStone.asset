@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf870f78bef0444a974560f285409f4, type: 3}
   m_Name: SmallStone
   m_EditorClassIdentifier: 
-  itemName: SmallStone
+  idName: SmallStone
   iconItem: {fileID: 21300000, guid: a5523ce15b8a9ce47932bdd62a9b5cd9, type: 3}
-  currentAmount: 3
+  currentAmount: 1
   maxAmount: 5

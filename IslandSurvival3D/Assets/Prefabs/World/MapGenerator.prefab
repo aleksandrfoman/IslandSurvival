@@ -271,8 +271,8 @@ MonoBehaviour:
     minHeight: 8.75
     maxHeight: 12
     parentTransform: {fileID: 3053262987111992698}
-    minScale: 0.95
-    maxScale: 1.2
+    minScale: 0.55
+    maxScale: 0.8
   - name: Bush
     prefab: {fileID: 3522931822481934376, guid: 44d42f96df5d39b4d878907dd858b5ce, type: 3}
     count: 100

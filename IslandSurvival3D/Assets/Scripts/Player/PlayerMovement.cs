@@ -33,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
     private Vector3 moveDirection;
+    public Vector3 MoveDirection => moveDirection;
     private new Rigidbody rigidbody;
 
     void Start()

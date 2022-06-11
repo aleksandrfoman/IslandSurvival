@@ -8,6 +8,8 @@ public class PlayerInventory : MonoBehaviour
     private List<InventorySlot> inventorySlots = new List<InventorySlot>();
     [SerializeField]
     private int curIndexQuickSlot;
+    [SerializeField]
+    private Player player;
 
     private void Start()
     {
@@ -19,6 +21,8 @@ public class PlayerInventory : MonoBehaviour
         ChangeQuickSlots();
     }
 
+
+
     public void ChangeQuickSlots()
     {
         if (Input.anyKey)
@@ -27,7 +31,14 @@ public class PlayerInventory : MonoBehaviour
             {
                 if (Input.GetKeyDown(i.ToString()))
                 {
-                    curIndexQuickSlot = i;
+                    if (i == 0)
+                    {
+                        curIndexQuickSlot = 9;
+                    }
+                    else
+                    {
+                        curIndexQuickSlot = i-1;
+                    }
                     UpdateQuickSlots(curIndexQuickSlot);
                 }
             }
@@ -59,6 +70,7 @@ public class PlayerInventory : MonoBehaviour
             if (i == selectIndex)
             {
                 inventorySlots[i].SelectedBackImage();
+                player.ActivateWeapon(inventorySlots[i].Item);
             }
             else
             {
@@ -74,8 +86,18 @@ public class PlayerInventory : MonoBehaviour
         {
             if(i <= 9)
             {
-                inventorySlots[i].UpdateInformation(i);
-                
+                if (i == 0)
+                {
+                    inventorySlots[i].UpdateInformation(1);
+                }
+                else if(i == 9)
+                {
+                    inventorySlots[i].UpdateInformation(0);
+                }
+                else
+                {
+                    inventorySlots[i].UpdateInformation(i+1);
+                }
             }
             else
             {
@@ -93,7 +115,7 @@ public class PlayerInventory : MonoBehaviour
             {
                 if (!inventorySlots[i].Item.IsFullAmount)
                 {
-                    if (inventorySlots[i].Item.ItemName == addItem.ItemName)
+                    if (inventorySlots[i].Item.IdName == addItem.IdName)
                     {
                         edge = inventorySlots[i].Item.AddItemAmount(addItem);
                         if (edge > 0)
@@ -120,5 +142,6 @@ public class PlayerInventory : MonoBehaviour
 
         }
         UpdatesSlotsInfo();
+        UpdateQuickSlots(curIndexQuickSlot);
     }
 }
